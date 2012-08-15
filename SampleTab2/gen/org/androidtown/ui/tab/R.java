@@ -28,8 +28,10 @@ public final class R {
         public static final int pencil=0x7f02000b;
         public static final int pencil2=0x7f02000c;
         public static final int progressbar=0x7f02000d;
-        public static final int whitebackg=0x7f02000e;
-        public static final int win=0x7f02000f;
+        public static final int progressbar2=0x7f02000e;
+        public static final int progressbar3=0x7f02000f;
+        public static final int whitebackg=0x7f020010;
+        public static final int win=0x7f020011;
     }
     public static final class id {
         public static final int ProgressBar01=0x7f060002;

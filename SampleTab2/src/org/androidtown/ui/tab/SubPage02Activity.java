@@ -65,25 +65,28 @@ public class SubPage02Activity extends Activity {
 				flexibility = total_using_money/4;
 				else if(couple)
 					flexibility = total_using_money/2;
-				if(cash >= flexibility)		//현금성 자산이 유동성이 있을 경우
+				if(cash >= flexibility)	{	//현금성 자산이 유동성이 있을 경우
 					mProgressBar1.setProgress(100); //100점으로 함 ## 수정 필요
+					mProgressBar1.setSecondaryProgress(70);
+				}
 				else if(cash < flexibility) //현금성 자산이 유동성이 없을 경우
 					mProgressBar1.setProgress(0); //0으로 함 ## 수정 필요
 				try {
-					Thread.sleep(1500);		//버튼 누른뒤 1.5초 딜레이 후 시작하기 위한...
+					Thread.sleep(1);		//버튼 누른뒤 1.5초 딜레이 후 시작하기 위한...
 					drawing();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				textview1.setText("오~~ 합격? 대단한데? 더 모아보셈 부자될것임 ㅁㄴㅇㄴㅂㅁㅈㅇㅁ내ㅓㅊㅌ먀ㅐㅓㅊ뱌ㅓ재더");
+				textview1.setText("오~~ 합격? 대단한데? 더 모아보sdfasw셈 부asd자될것임 ㅁㄴㅇㄴㅂㅁㅈㅇㅁ내ㅓㅊㅌ먀ㅐㅓㅊ뱌ㅓ재더");
 				break;
 				
 			case R.id.button2:
 				which_image = 2;
 				mProgressBar2.setProgress(60);
+				mProgressBar2.setSecondaryProgress(80);
 				try {
-					Thread.sleep(1500);
+					Thread.sleep(1);
 					drawing();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
@@ -111,7 +114,7 @@ public class SubPage02Activity extends Activity {
 				}
 				});background.start();
 				try {
-					Thread.sleep(1500);
+					Thread.sleep(1);
 					drawing();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
@@ -128,6 +131,7 @@ public class SubPage02Activity extends Activity {
 	Handler progressHandler = new Handler() {  
 		public void handleMessage(Message msg) {  
 			mProgressBar3.incrementProgressBy(1);  
+			mProgressBar3.setSecondaryProgress(90);
 			}  
 		};
 		

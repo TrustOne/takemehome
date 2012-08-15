@@ -58,7 +58,7 @@
         android:layout_below="@+id/textView1"
         android:layout_margin="2dip"
         android:max="100"
-        android:progressDrawable="@drawable/progressbar" />
+        android:progressDrawable="@drawable/progressbar2" />
 
     <Button
         android:id="@+id/button3"
@@ -87,7 +87,7 @@
         android:layout_below="@+id/textView2"
         android:layout_margin="2dip"
         android:max="100"
-        android:progressDrawable="@drawable/progressbar" />
+        android:progressDrawable="@drawable/progressbar3" />
 
     <ImageView
         android:id="@+id/imageView1"
