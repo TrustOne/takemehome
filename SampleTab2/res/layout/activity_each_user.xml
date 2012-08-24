@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btnselect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="선택" />
+
+    <LinearLayout
+        android:id="@+id/gvhalf1"
+        android:layout_width="150dp"
+        android:layout_height="350dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnselect"
+        android:layout_weight="0.4"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gvhalf2"
+        android:layout_width="150dp"
+        android:layout_height="350dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/gvhalf1"
+        android:layout_weight="0.4"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/levelseekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:thumb="@drawable/seekbar1"
+        android:progressDrawable="@drawable/seekbar" />
+
+    <Button
+        android:id="@+id/btnresult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/levelseekbar"
+        android:layout_alignLeft="@+id/btnselect"
+        android:layout_alignParentRight="true"
+        android:text="보기" />
+
+    <TextView
+        android:id="@+id/seconbartextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnresult"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/firstbartextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/seconbartextView"
+        android:layout_alignBottom="@+id/seconbartextView"
+        android:layout_alignRight="@+id/gvhalf2"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+		
+</RelativeLayout>

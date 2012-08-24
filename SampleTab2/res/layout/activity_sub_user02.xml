@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/btnProperty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="완료" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:padding="@dimen/padding_medium"
+        android:text="적금 총액" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/InstallmentSavings"
+        android:layout_marginTop="5dp"
+        android:padding="@dimen/padding_medium"
+        android:text="상속유산 총액" />
+
+    <EditText
+        android:id="@+id/InstallmentSavings"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textView1"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="@dimen/padding_medium" />
+
+    <EditText
+        android:id="@+id/Inheritance"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/TextView01"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="@dimen/padding_medium" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+         android:layout_below="@+id/Inheritance"
+        android:padding="@dimen/padding_medium"
+        android:text="부채총액" />
+
+    <EditText
+        android:id="@+id/Debt"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView03"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="@dimen/padding_medium" />
+
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Debt"
+        android:padding="@dimen/padding_medium"
+        android:text="사용 자산총액" />
+
+    <EditText
+        android:id="@+id/UseAssets"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView02"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="@dimen/padding_medium" />
+
+    <EditText
+        android:id="@+id/InvestedAssets"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/TextView04"
+        android:ems="10"
+        android:inputType="number"
+        android:padding="@dimen/padding_medium" />
+
+    <TextView
+        android:id="@+id/TextView04"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_below="@+id/UseAssets"
+        android:padding="@dimen/padding_medium"
+        android:text="투자자산 총액" />
+
+</RelativeLayout>
