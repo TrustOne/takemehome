@@ -7,8 +7,10 @@ import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
+import org.androidtown.ui.tab.RangeSeekBar.OnRangeSeekBarChangeListener;
 
 import android.os.Bundle;
+import android.content.Context;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -19,16 +21,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 import android.support.v4.app.NavUtils;
 
 public class EachUserActivity extends Activity {
 	ArrayList<UserInfor> user = new ArrayList<UserInfor>();
-	SeekBar mseekbar;
+//	SeekBar mseekbar;
 	TextView get_secondbar,get_firstbar;
 	final static int EDIT_ACT = 0;
 	double[] values = new double[3];
@@ -36,31 +42,56 @@ public class EachUserActivity extends Activity {
 	int[] colors = new int[] {Color.BLUE, Color.GREEN, Color.MAGENTA};
 	Button select;
 	private boolean[] CHECK_SELECTED_INDEX = null;
-	int getcaegun;
-	int getland;
-	int getstock;
-	double aver_getland;
-	double aver_getstock;
-	double aver_getcaegun;
+	double getcaegun=0;
+	double getland=0;
+	double getstock=0;
+	double aver_getland=0;
+	double aver_getstock=0;
+	double aver_getcaegun=0;
 	int Maxseekbar;
 	int get_sercondaryProgress;
 	int get_user_current_level;
 	int get_firstProgress;
-	
+	RadioGroup group;
+	ViewFlipper flipper;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_user);
+        Log.d("where", "tellme");
+        group = (RadioGroup)findViewById(R.id.radiogroup);
+       group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+		
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			// TODO Auto-generated method stub
+			switch (checkedId) {
+			case R.id.Radiobylevel:
+				flipper.showPrevious();
+				break;
+			case R.id.Radiobystatus:
+				flipper.showNext();
+				break;
+			default:
+				break;
+			}
+			
+			
+		}
+	}); // 라디오버튼을 눌렸을때의 반응
+        flipper = (ViewFlipper)findViewById(R.id.viewFlipper1);
+        Log.d("where", "tellme");
+
+        
         Bundle bundle = getIntent().getExtras();
-        mseekbar = (SeekBar)findViewById(R.id.levelseekbar);
+   //     mseekbar = (SeekBar)findViewById(R.id.levelseekbar);
         get_secondbar = (TextView)findViewById(R.id.seconbartextView);
         get_firstbar = (TextView)findViewById(R.id.firstbartextView);
-   
-        mseekbar.setSecondaryProgress(50);
+        
+//        mseekbar.setSecondaryProgress(50);
         findViewById(R.id.btnselect).setOnClickListener(mClickListener);
         findViewById(R.id.btnresult).setOnClickListener(mClickListener);
-        mseekbar.setOnSeekBarChangeListener(listenGenerator);
+     //   mseekbar.setOnSeekBarChangeListener(listenGenerator);
         select = (Button)findViewById(R.id.btnselect);
         
         user.add(new UserInfor("김신일","35","40","25"));
@@ -75,7 +106,7 @@ public class EachUserActivity extends Activity {
         user.add(new UserInfor("김키키","5","70","25"));
         user.add(new UserInfor("김피피","35","10","55"));
         Maxseekbar = user.size();
-        mseekbar.setMax(Maxseekbar);
+     //   mseekbar.setMax(Maxseekbar);
         calculCaegun(0,user.size());
         calculLand(0,user.size());
         calculStock(0,user.size());
@@ -83,13 +114,13 @@ public class EachUserActivity extends Activity {
         values[1] = Integer.parseInt(bundle.getString("stock"));
         values[2] = Integer.parseInt(bundle.getString("land"));
         get_user_current_level = bundle.getInt("level");
-        mseekbar.setSecondaryProgress(get_user_current_level);
-        get_firstProgress = mseekbar.getProgress();
-		get_sercondaryProgress = mseekbar.getSecondaryProgress();
+   //     mseekbar.setSecondaryProgress(get_user_current_level);
+    //    get_firstProgress = mseekbar.getProgress();
+	//	get_sercondaryProgress = mseekbar.getSecondaryProgress();
         
         DefaultRenderer renderer = new DefaultRenderer();
         renderer.setChartTitle(bundle.getString("name")+"님의 자산 비율");
-        renderer.setChartTitleTextSize(17);
+        renderer.setChartTitleTextSize(20);
         
         Log.d("asdsadw", user.size() + "ss" +  bundle.getInt("stock"));
         CategorySeries series = new CategorySeries("현재 비율");
@@ -116,7 +147,39 @@ public class EachUserActivity extends Activity {
         GraphicalView gv2 = ChartFactory.getPieChartView(this, series, renderer);
         LinearLayout test2 = (LinearLayout)findViewById(R.id.gvhalf2);
         test2.addView(gv2); 
+        
+        ///
+        RangeSeekBar<Integer> seekBar = new RangeSeekBar<Integer>(0, Maxseekbar, getBaseContext());
+        seekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Integer>() {
+                public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+                        // handle changed range values
+                	get_secondbar.setText(minValue+"위부터~"+maxValue+"위");
+        			get_firstbar.setText("나의순위:"+get_user_current_level);
+                	get_firstProgress = minValue;
+        			get_sercondaryProgress = maxValue;
+                }
+        });
+
+        // add RangeSeekBar to pre-defined layout
+        ViewGroup layout = (ViewGroup) findViewById(R.id.testlayout);
+        layout.addView(seekBar);
     }
+    
+    public void onCheckedChanged(RadioGroup arg0, int arg1) { // 라디오버튼
+    	   // TODO Auto-generated method stub
+        Log.d("where", "tellme");
+    	   switch (arg1) {
+    	   case R.id.Radiobylevel:
+    	    
+    	    break;
+    	   case R.id.Radiobystatus:
+    		   flipper.showNext();
+    	    break;
+    	 
+    	   }
+    	   
+    	  }
+    
     
     private SeekBar.OnSeekBarChangeListener listenGenerator
     = new SeekBar.OnSeekBarChangeListener()
@@ -124,8 +187,8 @@ public class EachUserActivity extends Activity {
 
 		public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
 			// TODO Auto-generated method stub
-			get_secondbar.setText("나의순위:"+mseekbar.getSecondaryProgress());
-			get_firstbar.setText("비교순위:"+mseekbar.getProgress());
+	//		get_secondbar.setText("나의순위:"+mseekbar.getSecondaryProgress());
+	//		get_firstbar.setText("비교순위:"+mseekbar.getProgress());
 		}
 
 		public void onStartTrackingTouch(SeekBar seekBar) {
@@ -135,8 +198,8 @@ public class EachUserActivity extends Activity {
 
 		public void onStopTrackingTouch(SeekBar seekBar) {
 			// TODO Auto-generated method stub
-			get_firstProgress = mseekbar.getProgress();
-			get_sercondaryProgress = mseekbar.getSecondaryProgress();
+	//		get_firstProgress = mseekbar.getProgress();
+	//		get_sercondaryProgress = mseekbar.getSecondaryProgress();
 		}
     	
     };
@@ -174,7 +237,7 @@ public class EachUserActivity extends Activity {
   					printaverage(get_firstProgress, get_sercondaryProgress);
   				}
   				else	
-  				{Log.d("123", get_firstProgress+"sadw"+get_sercondaryProgress+"??" + getcaegun);
+  				{
   					calculCaegun(get_sercondaryProgress, get_firstProgress);
   					calculLand(get_sercondaryProgress, get_firstProgress);
   					calculStock(get_sercondaryProgress, get_firstProgress);
@@ -231,7 +294,7 @@ public void getUserselect(){
 	calculCaegun(get_sercondaryProgress, get_firstProgress);
 }
 
-public int calculCaegun(int i,int size){
+public double calculCaegun(int i,int size){
 	
 	for(int j = i; j < size ; j++)
 	{
@@ -242,7 +305,7 @@ public int calculCaegun(int i,int size){
 	return getcaegun;
 	
 }
-public int calculLand(int i,int size){
+public double calculLand(int i,int size){
 	
 	for(int j = i; j < size ; j++)
 	{
@@ -253,7 +316,7 @@ public int calculLand(int i,int size){
 	return getland;
 	
 }
-public int calculStock(int i,int size){
+public double calculStock(int i,int size){
 
 	for(int j =i; j < size ; j++)
 	{
@@ -300,7 +363,7 @@ public void printaverage(int i,int size){
      renderer.setZoomButtonsVisible(true);
      renderer.setZoomEnabled(true);
 //     renderer.setClickEnabled(true);
-     renderer.setScale(0.5f);
+     renderer.setScale(0.7f);
 
 
      GraphicalView gv2 = ChartFactory.getPieChartView(this, series, renderer);

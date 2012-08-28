@@ -7,7 +7,7 @@
     <Button
         android:id="@+id/btnselect"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="선택" />
@@ -32,39 +32,130 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-    <SeekBar
-        android:id="@+id/levelseekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:thumb="@drawable/seekbar1"
-        android:progressDrawable="@drawable/seekbar" />
-
     <Button
         android:id="@+id/btnresult"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/levelseekbar"
-        android:layout_alignLeft="@+id/btnselect"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/gvhalf1"
         android:text="보기" />
 
-    <TextView
-        android:id="@+id/seconbartextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/btnresult"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:id="@+id/firstbartextView"
+    <ViewFlipper
+        android:id="@+id/viewFlipper1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/seconbartextView"
-        android:layout_alignBottom="@+id/seconbartextView"
-        android:layout_alignRight="@+id/gvhalf2"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-		
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnresult" >
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/firstbartextView"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginRight="26dp"
+                android:layout_marginTop="20dp"
+                android:text="나의순위"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/seconbartextView"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:text="선택순위"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+
+            <LinearLayout
+                android:id="@+id/testlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/firstbartextView" >
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="성별"
+                android:textSize="10dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkBox1"
+                android:layout_marginLeft="3dp"
+                android:text="직업"
+                android:textSize="10dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkBox2"
+                android:layout_marginLeft="3dp"
+                android:text="나이"
+                android:textSize="10dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/checkBox3"
+                android:layout_marginLeft="3dp"
+                android:text="결혼"
+                android:textSize="10dp" />
+        </RelativeLayout>
+    </ViewFlipper>
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/viewFlipper1"
+        android:layout_alignParentLeft="true"
+        android:checkedButton="@+id/radioButton1"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/Radiobylevel"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/btnresult"
+            android:text="자료비교"
+            android:textSize="@dimen/padding_small"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <RadioButton
+            android:id="@+id/Radiobystatus"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_below="@+id/gvhalf1"
+            android:layout_toRightOf="@+id/gvhalf2"
+            android:text="순위비교"
+            android:textSize="@dimen/padding_small"
+            android:textStyle="bold"
+            android:typeface="normal" />
+    </RadioGroup>
+
 </RelativeLayout>
