@@ -5,32 +5,28 @@ import java.util.ArrayList;
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
 import org.achartengine.model.CategorySeries;
+import org.achartengine.model.SeriesSelection;
 import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.androidtown.ui.tab.RangeSeekBar.OnRangeSeekBarChangeListener;
 
-import android.os.Bundle;
-import android.content.Context;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.text.style.BulletSpan;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
-import android.support.v4.app.NavUtils;
 
 public class EachUserActivity extends Activity {
 	ArrayList<UserInfor> user = new ArrayList<UserInfor>();
@@ -328,9 +324,10 @@ public double calculStock(int i,int size){
 	
 }
 public void printaverage(int i,int size){
-	 DefaultRenderer renderer = new DefaultRenderer();
+	 final DefaultRenderer renderer = new DefaultRenderer();
      renderer.setChartTitle(i+"~"+size+"위사이의 "+"평균 비율");
      renderer.setChartTitleTextSize(17);
+     renderer.setClickEnabled(true);
      if(size != i)
      {
      aver_getland = getland/(size-i);
@@ -365,8 +362,54 @@ public void printaverage(int i,int size){
 //     renderer.setClickEnabled(true);
      renderer.setScale(0.7f);
 
+     
+     final GraphicalView gv2 = ChartFactory.getPieChartView(this, series, renderer);
+   //  gv2.setClickable(true);
+     gv2.setOnTouchListener(new View.OnTouchListener() {
+		
+		public boolean onTouch(View v, MotionEvent event) {
+			  SeriesSelection seriesSelection = gv2.getCurrentSeriesAndPoint(); 
+	           double[] xy = gv2.toRealPoint(0); 
+			// TODO Auto-generated method stub
+	           if (seriesSelection == null) { 
+	               Log.d("clicked", "No chart element was clicked");
+	                   
+	             } else if(seriesSelection.getPointIndex() ==0) { 
+	               Log.d("0 clicked", seriesSelection.getPointIndex() +"and value:" + seriesSelection.getValue());
+	               Intent i = new Intent(EachUserActivity.this,ClickActivity.class);
+	               i.putExtra("키", seriesSelection.getPointIndex());
+	               startActivity(i);
+	           //    renderer.getSeriesRendererAt(seriesSelection.getPointIndex()).setColor(Color.alpha(0x5000ff00)); 
+	           //    gv2.repaint(); 
 
-     GraphicalView gv2 = ChartFactory.getPieChartView(this, series, renderer);
+	             } 
+	             else if(seriesSelection.getPointIndex() ==1) { 
+	                 Log.d("0 clicked", seriesSelection.getPointIndex() +"and value:" + seriesSelection.getValue());
+	                 Intent i = new Intent(EachUserActivity.this,ClickActivity.class);
+		               i.putExtra("키", seriesSelection.getPointIndex());
+		               startActivity(i);
+	         //        renderer.getSeriesRendererAt(seriesSelection.getPointIndex()).setColor(Color.alpha(0x5000ff00)); 
+	         //        gv2.repaint(); 
+
+	               } 
+	             else if(seriesSelection.getPointIndex() ==2) { 
+	                 Log.d("0 clicked", seriesSelection.getPointIndex() +"and value:" + seriesSelection.getValue());
+	                 Intent i = new Intent(EachUserActivity.this,ClickActivity.class);
+		               i.putExtra("키", seriesSelection.getPointIndex());
+		               startActivity(i);
+	       //          renderer.getSeriesRendererAt(seriesSelection.getPointIndex()).setColor(Color.alpha(0x5000ff00)); 
+	      //           gv2.repaint(); 
+
+	               } 
+	           
+			return false;
+		}
+	});  
+         
+         
+           	
+     
+       
      LinearLayout test2 = (LinearLayout)findViewById(R.id.gvhalf1);
      test2.addView(gv2); 
      aver_getcaegun = 0;

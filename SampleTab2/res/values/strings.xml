@@ -81,5 +81,6 @@
     <string name="title_activity_sub_user02">SubUser02Activity</string>
     <string name="title_activity_sub_user03">SubUser03Activity</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_click">ClickActivity</string>
 
 </resources>
