@@ -1,5 +1,7 @@
 package org.androidtown.ui.tab;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +13,7 @@ import android.util.Log;
 
 public class DatabaseOperator {
  /*
-	
+
     //table 정의
 	public static final String TABLE_MEMBER = "member";					//사용자 테이블 
     public static final String TABLE_PROPERTY  = "collectiveProperty"; 	//자산형태
@@ -320,7 +322,8 @@ public class DatabaseOperator {
     public static final String TABLE_DEBT_INFORMATION		 	= "debtInformation"; 	//자산형태
     public static final String TABLE_INCOME_EXPENSE_INFORMATION = "incomeExpenseInformation"; 	//자산형태
     public static final String TABLE_ECT_INFORMATION 			= "ectInformation"; 	//자산형태
-
+    public static final String TABLE_ECT_INFORMATION_EXPENSE	= "ectExpense";
+    
     //entity 정의에 사용될 상수
     //TABLE_MEMBER_INFORMATION
     public static final String ENTITY_MEMBER_INFORMATION_ID 		 = "member_id";						//사용자 id
@@ -347,16 +350,23 @@ public class DatabaseOperator {
     public static final String ENTITY_ECT_INFORMATION_INDEX  = "ectInformationIndex";
     public static final String ENTITY_ECT_INFORMATION_VALUES = "ectInformationValues";
 
+    //TABLE_ECT_INFORMATION_EXPIENSE
+    public static final String ENTITY_ECT_INFORMATION_EXPIENSE_ID 	  = "ectExpenseId";
+    public static final String ENTITY_ECT_INFORMATION_EXPIENSE_INDEX  = "ectExpenseIndex";
+    public static final String ENTITY_ECT_INFORMATION_EXPIENSE_NAME   = "ectExpenseName";
+    public static final String ENTITY_ECT_INFORMATION_EXPIENSE_VALUES = "ectExpenseValues";
+    public static final String ENTITY_ECT_INFORMATION_EXPIENSE_YEARS  = "ectExpenseYear";
+
     //테이블 생성 쿼리
     //
     private static final String CREATE_TABLE_MEMBER_INFORMATION = "create table " + TABLE_MEMBER_INFORMATION + " ("
 			+ ENTITY_MEMBER_INFORMATION_ID 			+ " integer primary key autoincrement, "
-			+ ENTITY_MEMBER_INFORMATION_AGE 		+ " integer, "
-			+ ENTITY_MEMBER_INFORMATION_RESIDENTIAL + " text, "
-			+ ENTITY_MEMBER_INFORMATION_JAP 		+ " text, "
-			+ ENTITY_MEMBER_INFORMATION_SEX 		+ " text, " //CHECK(" + ENTITY_SEX +" IN(\"female\", \"male\")) not null,"
-			+ ENTITY_MEMBER_INFORMATION_MARRIAGE 	+ " text, " // CHECK(" + ENTITY_MARRIAGE +" IN(\"yes\", \"no\")) not null,"
-			+ ENTITY_MEMBER_INFORMATION_CHILD 		+ " integer);";
+			+ ENTITY_MEMBER_INFORMATION_AGE 		+ " integer default 0, "
+			+ ENTITY_MEMBER_INFORMATION_RESIDENTIAL + " text default \"\", "
+			+ ENTITY_MEMBER_INFORMATION_JAP 		+ " text default \"\", "
+			+ ENTITY_MEMBER_INFORMATION_SEX 		+ " text default \"\", " //CHECK(" + ENTITY_SEX +" IN(\"female\", \"male\")) not null,"
+			+ ENTITY_MEMBER_INFORMATION_MARRIAGE 	+ " text default \"\", " // CHECK(" + ENTITY_MARRIAGE +" IN(\"yes\", \"no\")) not null,"
+			+ ENTITY_MEMBER_INFORMATION_CHILD 		+ " integer default 0);";
     private static final String CREATE_TABLE_COLLECTIVE_INFORMATION = "create table " + TABLE_COLLECTIVE_INFORMATION + " ("
 			+ ENTITY_COLLECTIVE_INFORMATION_INDEX + " String primary key, "
 			+ ENTITY_COLLECTIVE_INFORMATION_VALUES + " double );";
@@ -369,10 +379,15 @@ public class DatabaseOperator {
     private static final String CREATE_TABLE_ECT_INFORMATION = "create table " + TABLE_ECT_INFORMATION + " ("
 			+ ENTITY_ECT_INFORMATION_INDEX + " String primary key, "
 			+ ENTITY_ECT_INFORMATION_VALUES + " double );";
-    
+    private static final String CREATE_TABLE_ECT_INFORMATION_EXPENSE = "create table " + TABLE_ECT_INFORMATION_EXPENSE + " ("
+			+ ENTITY_ECT_INFORMATION_EXPIENSE_ID + " integer primary key autoincrement, "
+			+ ENTITY_ECT_INFORMATION_EXPIENSE_INDEX + " String, "
+			+ ENTITY_ECT_INFORMATION_EXPIENSE_NAME + " String, "
+			+ ENTITY_ECT_INFORMATION_EXPIENSE_VALUES + " double, "
+			+ ENTITY_ECT_INFORMATION_EXPIENSE_YEARS + " double );";
     
     //데이터 베이스 네임 설정
-    private static final String DATABASE_NAME = "data3"; 
+    private static final String DATABASE_NAME = "data5"; 
     private static final int DATABASE_VERSION = 2; 
 
     private final Context myContext; 
@@ -393,6 +408,7 @@ public class DatabaseOperator {
 	       	db.execSQL(CREATE_TABLE_DEBT_INFORMATION); 
 	       	db.execSQL(CREATE_TABLE_INCOME_EXPENSE_INFORMATION); 
 	        db.execSQL(CREATE_TABLE_ECT_INFORMATION); 
+	        db.execSQL(CREATE_TABLE_ECT_INFORMATION_EXPENSE);
        } 
 
        //db 전체를 갱신할 때 사용
@@ -402,7 +418,8 @@ public class DatabaseOperator {
            db.execSQL("DROP TABLE IF EXISTS" + TABLE_COLLECTIVE_INFORMATION); 
            db.execSQL("DROP TABLE IF EXISTS" + TABLE_DEBT_INFORMATION); 
            db.execSQL("DROP TABLE IF EXISTS" + TABLE_INCOME_EXPENSE_INFORMATION); 
-           db.execSQL("DROP TABLE IF EXISTS" + TABLE_ECT_INFORMATION); 
+           db.execSQL("DROP TABLE IF EXISTS" + TABLE_ECT_INFORMATION);
+           db.execSQL("DROP TABLE IF EXISTS" + TABLE_ECT_INFORMATION_EXPENSE);
            onCreate(db); 
        } 
    } 
@@ -424,7 +441,7 @@ public class DatabaseOperator {
     public boolean insertNoteMemberInformation(int age, String residentialArea, String jap,
     		String sex, String marriage, int child) { 
         ContentValues initialValues = new ContentValues();
-        
+
         int i = fetchNoteMemberInformation().getCount();
         if(i == 0) {
             initialValues.put(ENTITY_MEMBER_INFORMATION_AGE,age);
@@ -439,23 +456,28 @@ public class DatabaseOperator {
         else if (i == 1){
         	if (age != 0) {
         		initialValues.put(ENTITY_MEMBER_INFORMATION_AGE,age);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
         	if (!(residentialArea.equals(""))) {
         		initialValues.put(ENTITY_MEMBER_INFORMATION_RESIDENTIAL,residentialArea);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
         	if (!(jap.equals(""))) {
         		initialValues.put(ENTITY_MEMBER_INFORMATION_JAP,jap);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
         	if (!(sex.equals(""))) {
         		initialValues.put(ENTITY_MEMBER_INFORMATION_SEX,sex);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
         	if (!(marriage.equals(""))) {
                 initialValues.put(ENTITY_MEMBER_INFORMATION_MARRIAGE,marriage);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
         	if (child != 0) {
                 initialValues.put(ENTITY_MEMBER_INFORMATION_CHILD,child);
+            	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
         	}
-        	myDb.update(TABLE_MEMBER_INFORMATION, initialValues, ENTITY_MEMBER_INFORMATION_ID + "= 1", null);
             return false;
         }
         else{
@@ -546,6 +568,37 @@ public class DatabaseOperator {
             return false;
         }
     }
+       
+    public boolean insertNoteEctInformationExpense(String index ,String name, double values, double years) { 
+        ContentValues initialValues = new ContentValues(); 
+        initialValues.put(ENTITY_ECT_INFORMATION_EXPIENSE_INDEX, index);
+        initialValues.put(ENTITY_ECT_INFORMATION_EXPIENSE_NAME, name);
+        initialValues.put(ENTITY_ECT_INFORMATION_EXPIENSE_VALUES, values);
+        initialValues.put(ENTITY_ECT_INFORMATION_EXPIENSE_YEARS, years);
+
+        Cursor mCursorr =  myDb.query(true, TABLE_ECT_INFORMATION_EXPENSE, 
+				 new String[] {ENTITY_ECT_INFORMATION_EXPIENSE_INDEX, ENTITY_ECT_INFORMATION_EXPIENSE_NAME, ENTITY_ECT_INFORMATION_EXPIENSE_VALUES, ENTITY_ECT_INFORMATION_EXPIENSE_YEARS},
+				 ENTITY_ECT_INFORMATION_EXPIENSE_INDEX + "= \"" + index+"\" and " + ENTITY_ECT_INFORMATION_EXPIENSE_NAME + "= \"" + name+"\"", null, null, null, null, null);
+		if (mCursorr != null) { 
+			mCursorr.moveToFirst(); 
+		} 
+		
+        if(mCursorr.getCount()==0){
+        	myDb.insert(TABLE_ECT_INFORMATION_EXPENSE, null, initialValues);
+           	return true; 
+        } else {
+        	myDb.update(TABLE_ECT_INFORMATION_EXPENSE, initialValues, ENTITY_ECT_INFORMATION_EXPIENSE_INDEX + "= \"" + index+"\" and " + ENTITY_ECT_INFORMATION_EXPIENSE_NAME + "= \"" + name+"\"", null);
+           	return false; 
+        }
+    }
+    
+    public boolean deleteNoteEctInformationExpense(String index ,String name) { 
+        ContentValues initialValues = new ContentValues(); 
+
+        String deleteNote = ENTITY_ECT_INFORMATION_EXPIENSE_INDEX + "= \"" + index + "\" and  " + ENTITY_ECT_INFORMATION_EXPIENSE_NAME + "= \"" + name + "\"";
+       	myDb.delete(TABLE_ECT_INFORMATION_EXPENSE, deleteNote, null);
+       	return true; 
+    }
     
     public Cursor fetchNoteMemberInformation() throws SQLException { 
 
@@ -604,8 +657,24 @@ public class DatabaseOperator {
         } 
         return mCursor; 
     } 
-    
-    
+
+    public Cursor fetchNoteEctInformationExpense(String index) throws SQLException { 
+        Cursor mCursorr =  myDb.query(true, TABLE_ECT_INFORMATION_EXPENSE, 
+				 new String[] {ENTITY_ECT_INFORMATION_EXPIENSE_INDEX, ENTITY_ECT_INFORMATION_EXPIENSE_NAME, ENTITY_ECT_INFORMATION_EXPIENSE_VALUES, ENTITY_ECT_INFORMATION_EXPIENSE_YEARS},
+				 ENTITY_ECT_INFORMATION_EXPIENSE_INDEX + "= \"" + index + "\"", null, null, null, null, null);
+		if (mCursorr != null) { 
+			mCursorr.moveToFirst(); 
+		} 
+		return mCursorr; 
+    }    
+
+    public void insertDB(String index, ArrayList<Object> values){
+    	if (index.equals("기타 니즈분석법니즈금액")) {
+    		this.insertNoteEctInformationExpense("기타 니즈분석법니즈금액", (String) values.get(0), (Double) values.get(1), (Double) values.get(2));
+    	}
+    	else{}
+    }
+
     public void insertDB(String index, double values){
     	if (index.equals("금융자산 예금")) {
     		this.insertNoteCollectiveInformation("금융자산 예금", values);
@@ -664,6 +733,9 @@ public class DatabaseOperator {
     	else if (index.equals("기타 모기지이율")) {
     		this.insertNoteEctInformation("기타 모기지이율", values);
     	}
+    	else if (index.equals("기타 모기지상환기환")) {
+    		this.insertNoteEctInformation("기타 모기지이율", values);
+    	}
     	else if (index.equals("기타 72법칙기대수익률")) {
     		this.insertNoteEctInformation("기타 72법칙기대수익률", values);
     	}
@@ -681,9 +753,6 @@ public class DatabaseOperator {
     	}
     	else if (index.equals("기타 은퇴예상시점")) {
     		this.insertNoteEctInformation("기타 은퇴예상시점", values);
-    	}
-    	else if (index.equals("기타 니즈분석법니즈금액")) {
-    		this.insertNoteEctInformation("기타 니즈분석법니즈금액", values);
     	}
     	else{}
     }
@@ -773,6 +842,9 @@ public class DatabaseOperator {
     	else if (index.equals("기타 모기지이율")) {
     		cursor = this.fetchNoteEctInformation("기타 모기지이율");
     	}
+    	else if (index.equals("기타 모기지상환기환")) {
+    		cursor = this.fetchNoteEctInformation("기타 모기지이율");
+    	}
     	else if (index.equals("기타 72법칙기대수익률")) {
     		cursor = this.fetchNoteEctInformation("기타 72법칙기대수익률");
     	}
@@ -792,75 +864,137 @@ public class DatabaseOperator {
     		cursor = this.fetchNoteEctInformation("기타 은퇴예상시점");
     	}
     	else if (index.equals("기타 니즈분석법니즈금액")) {
-    		cursor = this.fetchNoteEctInformation("기타 니즈분석법니즈금액");
+    		cursor = this.fetchNoteEctInformationExpense("기타 니즈분석법니즈금액");
+    		ArrayList<Object> returnValues = new ArrayList<Object>();
+    		if (cursor.getCount() != 0) {
+    			do {
+		    		ArrayList<Object> cursorValues = new ArrayList<Object>();
+
+    				cursorValues.add(cursor.getString(cursor.getColumnIndex(ENTITY_ECT_INFORMATION_EXPIENSE_NAME)));
+    				cursorValues.add(cursor.getDouble(cursor.getColumnIndex(ENTITY_ECT_INFORMATION_EXPIENSE_VALUES)));
+    				cursorValues.add(cursor.getDouble(cursor.getColumnIndex(ENTITY_ECT_INFORMATION_EXPIENSE_YEARS)));
+
+    				returnValues.add(cursorValues);
+    			} while (cursor.moveToNext());
+	    		return returnValues;
+    		}
+    		else {
+    			return null;
+    		}
     	}
     	else if (index.equals("사용자 거주지역")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getString(2);
+        		return cursor.getString(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_RESIDENTIAL));
         	}
         	else {
-        		return "";
+        		return null;
         	}
     	}
     	else if (index.equals("사용자 직업")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getString(3);
+        		return cursor.getString(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_JAP));
         	}
         	else {
-        		return "";
+        		return null;
         	}
     	}
     	else if (index.equals("사용자 성별")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getString(4);
+        		return cursor.getString(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_SEX));
         	}
         	else {
-        		return "";
+        		return null;
         	}
     	}
     	else if (index.equals("사용자 결혼유무")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getString(5);
+        		return cursor.getString(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_MARRIAGE));
         	}
         	else {
-        		return "";
+        		return null;
         	}
     	}
     	else if (index.equals("사용자 나이")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getInt(1);
+        		return cursor.getInt(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_AGE));
         	}
         	else {
-        		Integer returnValue = new Integer(0);
-        		return returnValue;
+        		return null;
         	}
     	}
     	else if (index.equals("사용자 자녀수")) {
     		cursor = this.fetchNoteMemberInformation();
         	if(cursor.getCount() != 0){
-        		return cursor.getInt(6);
+        		return cursor.getInt(cursor.getColumnIndex(ENTITY_MEMBER_INFORMATION_CHILD));
         	}
         	else {
-        		Integer returnValue = new Integer(0);
-        		return returnValue;
+        		return null;
         	}
     	}
     	else {
-    		return "해당 index 항목이 없습니다.";
+    		return "index null";
     	}
 
-    	Log.i("dffdsadfas","dfpfdjpdafsjpdpfjspfjdsapj");
-    	Log.i("DSdsafdaffdsafdsdfs",""+cursor.getCount());
-    	if (cursor.getCount() == 0) {
-    		Double returnValue = new Double(0);
-    		return returnValue;
-    	} else {
+    	if (cursor.getCount() != 0) {
        		return cursor.getDouble(1);
+    	} else {
+    		//차후 수정 필요할 수도 있음
+    		return null;
     	}
+    }
+    
+    public Double getSumDB(String tableName){
+    	Cursor mCursor = null;
+    	String requestSql;
+    	
+    	if(tableName.equals("금융자산")){
+    		requestSql = "select sum(" + ENTITY_COLLECTIVE_INFORMATION_VALUES + ")"
+		 			   + " from " + TABLE_COLLECTIVE_INFORMATION;
+
+    		mCursor =  myDb.rawQuery(requestSql, null);
+    		if (mCursor != null) { 
+    			mCursor.moveToFirst();
+    			return mCursor.getDouble(0);
+			} 
+    	}
+    	else if(tableName.equals("기타자산")){
+    		requestSql = "select sum(" + ENTITY_ECT_INFORMATION_VALUES + ")"
+		 			   + " from " + TABLE_ECT_INFORMATION;
+
+    		mCursor =  myDb.rawQuery(requestSql, null);
+	 		if (mCursor != null) { 
+	 			mCursor.moveToFirst();
+	 			return mCursor.getDouble(0);
+			} 
+    	}
+    	else if(tableName.equals("부채")){
+    		requestSql = "select sum(" + ENTITY_DEBT_INFORMATION_VALUES + ")"
+		 			   + " from " + TABLE_DEBT_INFORMATION;
+
+	 		mCursor =  myDb.rawQuery(requestSql, null);
+	 		if (mCursor != null) { 
+	 			mCursor.moveToFirst();
+	 			return mCursor.getDouble(0);
+			} 
+    	}
+    	else if(tableName.equals("지출입")){
+    		requestSql = "select sum(" + ENTITY_INCOME_EXPENSE_INFORMATION_VALUES + ")"
+		 			   + " from " + TABLE_INCOME_EXPENSE_INFORMATION;
+
+	 		mCursor =  myDb.rawQuery(requestSql, null);
+	 		if (mCursor != null) { 
+	 			mCursor.moveToFirst();
+	 			return mCursor.getDouble(0);
+			} 
+    	}
+    	else {
+    		return null;
+    	}
+		return null;
     }
 }

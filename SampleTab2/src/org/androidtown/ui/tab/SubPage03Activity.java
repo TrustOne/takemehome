@@ -1,26 +1,22 @@
 package org.androidtown.ui.tab;
-
+import org.androidtown.ui.tab.ExpandableListAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +25,7 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
     /** Called when the activity is first created. */
 	int lastExpandedGroupPosition = 0; 
 	private ExpandableListView listView;
+	private Context context;
 	private String[] group = {"하늘 아래 땅아래", "책2"};
 	private String[][] childs = {{"- 이 책은 이러이러한 기능을 수행하며\n -!!!합니다."},{"- 이 책은 이러이러한 기능을 수행하며\n - 헐"}};
 	DatabaseOperator databaseoperator= new DatabaseOperator(this);
@@ -39,56 +36,34 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
 	AlertDialog dialogspec;
 	 final static int DIALOG_1 = 0;
 	 EditText e1,e2,e3;
-
+	 Intent bk_subActivity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
         setContentView(R.layout.subpage03);
         databaseoperator.open();
     //    Log.d("형규의에러", "엿같다");
-        e1 = (EditText)findViewById(R.id.editbuche); //부채
-        e2 = (EditText)findViewById(R.id.editbomul);	//보물
-        e3 = (EditText)findViewById(R.id.editasset);	//순자산
+   
    //     Log.d("형규의에러", "엿같다");
+        databaseoperator.insertDB("사용자 거주지역", "부천");
+//        databaseoperator.insertDB("금융자산 예금", 3000d);
+//        databaseoperator.insertDB("금융자산 펀드", 2000d);
      // View 관련 데이타를 채운다
         str1 = (String) databaseoperator.getDB("사용자 거주지역");
         test1 = (Double) databaseoperator.getDB("금융자산 예금");
        test2 = (Double)databaseoperator.getDB("금융자산 펀드");
-       Log.d(str1 + test1.toString() + test2.toString(), "엿같다");
       
-       if(e1 != null){
-        e1.setText("juyg");Log.d("형규의에러", "엿같다");
-        e2.setText(""+test1.toString());
-       e3.setText(""+test2.toString());
-       }
-        Log.d("형규의에러", "엿같다");
-        inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+      
+     
+     
+    
      
        
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setTitle("입력이 없습니다");
-       alert.setMessage( "이 기능을 사용하기위해선 입력이 필요합니다" );
-       alert.setPositiveButton( "입력", new DialogInterface.OnClickListener()
-       {
-           public void onClick(DialogInterface dialog, int which) {
-        	   showDialog(DIALOG_1);
-        	 
-           }
-      });
-    //   this.startActivity(new Intent(this, SplashActivity.class));
-       alert.setNegativeButton( "취소",new DialogInterface.OnClickListener()
-       {
-           public void onClick(DialogInterface dialog, int which ) {
-        	  
-           }
-      });
-       Log.d("형규의에러", "엿같다");
-       if(str1.equals("") && test1 == 0 && test2 ==0) 
-    	   alert.show();
-       Log.d("형규의에러", "엿같다");
-       ExpandableListAdapter adapter = new MyExpandableListAdapter();
        
-       listView = (ExpandableListView) findViewById(R.id.listView);
+       
+       ExpandableListAdapter adapter = new ExpandableListAdapter(this);
+       
+       listView = (ExpandableListView) findViewById(R.id.listView2);
        listView.setAdapter(adapter);
               
        listView.setOnChildClickListener(this);
@@ -98,75 +73,18 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
         
     }
   
-    @Override
-    protected Dialog onCreateDialog(int id) {
+  
 
-     switch (id) {
-     case DIALOG_1:
-      final LinearLayout linear = (LinearLayout)inflater.inflate(R.layout.enterdialog, null);
-      
-      return dialogspec = new AlertDialog.Builder(this)
-   //      .setTitle("입력")
-    //     .setIcon(R.drawable.asset_manager2)
-         .setView(linear)
-         .setPositiveButton("확인", new DialogInterface.OnClickListener() {      
-          public void onClick(DialogInterface dialog, int which) {
-             ImageButton button1 = (ImageButton)findViewById(R.id.Imagebutton01);  
-             ImageButton button2 = (ImageButton)findViewById(R.id.Imagebutton02);
-             ImageButton button3 = (ImageButton)findViewById(R.id.Imagebutton03);
-          
-          }
-         })
-         
-         .setNegativeButton("취소", null)
-         .create(); 
-     }
-     return null;
-    }
-    
-    public void onButtonClicked(View v){
-    	switch (v.getId()) {
-		case R.id.Imagebutton01:
-			 recommand = (TextView) dialogspec.findViewById(R.id.textView0001);
-			
-			Log.d("??22", "asdsa???");
-			recommand.setText("sdfdsf");
-			break;
-		case R.id.Imagebutton02:
-			recommand = (TextView) dialogspec.findViewById(R.id.textView0001);
-			Log.d("??22", "asdsa???");
-			recommand.setText("sdhfsdf");
-			break;
-		case R.id.Imagebutton03:
-			recommand = (TextView) dialogspec.findViewById(R.id.textView0001);
-			Log.d("??22", "asdsa???");
-			recommand.setText("sdfsfdscc");
-			break;
 
-		default:
-			break;
-		}
-       }
-    @SuppressLint("NewApi")
-	@Override  
-    protected void onPrepareDialog(int id, Dialog dialog, Bundle args) {   
-        
-     switch (id) {   
-     case DIALOG_1:   
-     {   
-    	 
-      break;   
-     }   
-     default:   
-      break;   
-     }   
-        
-     super.onPrepareDialog(id, dialog, args);   
-    }
 
-    
+  /*
     public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 
+    	public MyExpandableListAdapter(Context context) {
+            this.context = context;
+
+        }
+    	
 		public Object getChild(int groupPosition, int childPosition) {
 			return childs[groupPosition][childPosition];
 		}
@@ -175,7 +93,7 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
 			return childPosition;
 		}
 
-//		
+		
 		public TextView getGenericView(){
 			AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 64);
 			
@@ -227,10 +145,11 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
-			TextView textView = getGenericView();
+			/*TextView textView = getGenericView();
 			textView.setText(getGroup(groupPosition).toString());
 			
-			listView.setGroupIndicator(null);
+			listView.setGroupIndicator(null); 
+			
 			
 			return textView;
 			
@@ -246,11 +165,7 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
 			return true;
 		}
     	
-    }
-
-    
-    
-    
+    }   */ 
     
 	public void onGroupExpand(int groupPosition) {
 		// TODO Auto-generated method stub
@@ -271,7 +186,24 @@ public class SubPage03Activity extends Activity  implements OnChildClickListener
 			int groupPosition, int childPosition, long id) {
 		// TODO Auto-generated method stub
 		if(groupPosition==0){
-			setContentView(R.layout.portfolio);
+			bk_subActivity = new Intent(this, Bk_UtilityActivity.class);
+			bk_subActivity.putExtra("getNumber", groupPosition);
+			startActivity(bk_subActivity);
+		}
+		else if(groupPosition==1){
+			bk_subActivity = new Intent(this, Bk_UtilityActivity.class);
+			bk_subActivity.putExtra("getNumber", groupPosition);
+			startActivity(bk_subActivity);
+		}
+		else if(groupPosition==2){
+			bk_subActivity = new Intent(this, Bk_UtilityActivity.class);
+			bk_subActivity.putExtra("getNumber", groupPosition);
+			startActivity(bk_subActivity);
+		}
+		else if(groupPosition==3){
+			bk_subActivity = new Intent(this, Bk_UtilityActivity.class);
+			bk_subActivity.putExtra("getNumber", groupPosition);
+			startActivity(bk_subActivity);
 		}
 		// TODO Auto-generated method stub
 		return false;

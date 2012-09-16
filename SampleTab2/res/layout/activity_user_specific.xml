@@ -1,0 +1,216 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:text="예금"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvsaving"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="원"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editdeposit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btndeposit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Onclick"
+                android:text="저장"
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:text="펀드"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvfund"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="원"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editfund"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btnfund"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Onclick"
+                android:text="저장" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium" >
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:text="보험"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvinsurance"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="원"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editinsurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btninsurance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Onclick"
+                android:text="저장" />
+        
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium" >
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:text="채권"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvbond"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="원"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editbond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btnbond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Onclick"
+                android:text="저장" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_medium" >
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:text="주식"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tvstock"
+                android:layout_width="70dip"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="원"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/editstock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number" >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/btnstock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="Onclick"
+                android:text="저장" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

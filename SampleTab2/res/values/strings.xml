@@ -82,5 +82,15 @@
     <string name="title_activity_sub_user03">SubUser03Activity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_click">ClickActivity</string>
+    <string name="title_activity_bk__utility">Bk_UtilityActivity</string>
+    <string name="title_activity_sub_page05">SubPage05Activity</string>
+    <string name="title_activity_user_specific">UserSpecificActivity</string>
+    <string name="title_activity_user01">User01Activity</string>
+    <string name="title_activity_user001">User001Activity</string>
+    <string name="title_activity_user002">User002Activity</string>
+    <string name="title_activity_user003">User003Activity</string>
+    <string name="title_activity_user004">User004Activity</string>
+    <string name="title_activity_user005">User005Activity</string>
+    <string name="title_activity_bk__specific_">Bk_Specific_Activity</string>
 
 </resources>
